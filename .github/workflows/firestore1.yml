@@ -1,0 +1,15 @@
+name: Backup Firestore v1
+on:
+  schedule:
+    - cron: '0 * * * *'
+  workflow_dispatch:
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: lfdm/firestore-backup-gh-action@1.0.0
+        with:
+          gcloudAuth: ${{ secrets.FIREBASE_BACKUP_GCLOUD_AUTH }}
+          projectId: logging-ed88b
+          storageBucket: gs://logging-ed88b.appspot.com
