@@ -2,8 +2,8 @@ name: Backup Firestore
 
 on:
   schedule:
-    - cron: '0 */2 * * *'  # Runs every 2 hours
-  workflow_dispatch:        # Allows manual triggering
+    - cron: '0 */1 * * *'
+  workflow_dispatch:
 
 env:
   PROJECT_ID: 'logging-ed88b'
