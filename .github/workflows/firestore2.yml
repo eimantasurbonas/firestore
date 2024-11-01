@@ -1,0 +1,33 @@
+name: Firestore Backup
+
+on:
+  schedule:
+    - cron: '0 */2 * * *'  # Runs every 2 hours
+  workflow_dispatch:        # Allows manual triggering
+
+env:
+  PROJECT_ID: 'logging-ed88b'
+  BACKUP_BUCKET: 'gs://logging-ed88b.appspot.com'
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+
+    steps:
+    - id: 'auth'
+      name: 'Authenticate to Google Cloud'
+      uses: 'google-github-actions/auth@v2'
+      with:
+        credentials_json: '${{ secrets.FIREBASE_BACKUP_GCLOUD_AUTH }}'
+
+    - name: 'Set up Cloud SDK'
+      uses: 'google-github-actions/setup-gcloud@v2'
+        
+    - name: 'Create backup timestamp'
+      id: timestamp
+      run: echo "timestamp=$(date +%Y%m%d_%H%M%S)" >> $GITHUB_OUTPUT
+        
+    - name: 'Run Firestore Export'
+      run: |
+        gcloud firestore export gs://${{ env.BACKUP_BUCKET }}/backups/${{ steps.timestamp.outputs.timestamp }} \
+          --project=${{ env.PROJECT_ID }}
