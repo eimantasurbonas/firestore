@@ -29,5 +29,5 @@ jobs:
         
     - name: 'Run Firestore Export'
       run: |
-        gcloud firestore export gs://${{ env.BACKUP_BUCKET }}/backups/${{ steps.timestamp.outputs.timestamp }} \
+        gcloud firestore export gs://${{ env.BACKUP_BUCKET }}/${{ steps.timestamp.outputs.timestamp }} \
           --project=${{ env.PROJECT_ID }}
