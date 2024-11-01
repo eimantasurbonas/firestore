@@ -7,7 +7,7 @@ on:
 
 env:
   PROJECT_ID: 'logging-ed88b'
-  BACKUP_BUCKET: 'gs://logging-ed88b.appspot.com'
+  BACKUP_BUCKET: 'logging-ed88b.appspot.com'
 
 jobs:
   backup:
