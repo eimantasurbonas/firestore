@@ -1,5 +1,4 @@
-name: Backup Firestore ${{ format('[{0}]', steps.timestamp.outputs.timestamp) }}
-
+name: Backup Firestore
 on:
   schedule:
     - cron: '0 */1 * * *'  # Every hour
@@ -13,11 +12,6 @@ jobs:
   backup:
     runs-on: ubuntu-latest
     steps:
-    - name: 'Set run name'
-      id: timestamp
-      run: |
-        echo "timestamp=$(date +'%Y-%m-%d_%H:%M:%S')" >> $GITHUB_OUTPUT
-
     - id: 'auth'
       name: 'Authenticate to Google Cloud'
       uses: 'google-github-actions/auth@v2'
@@ -26,6 +20,11 @@ jobs:
 
     - name: 'Set up Cloud SDK'
       uses: 'google-github-actions/setup-gcloud@v2'
+        
+    - name: 'Create backup timestamp'
+      id: timestamp
+      run: |
+        echo "timestamp=$(date +'%Y-%m-%d_%H:%M:%S')" >> $GITHUB_OUTPUT
         
     - name: 'Run Firestore Export'
       run: |
