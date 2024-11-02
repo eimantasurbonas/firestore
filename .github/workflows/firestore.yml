@@ -1,8 +1,7 @@
 name: Backup Firestore
-
 on:
   schedule:
-    - cron: '0 */1 * * *'
+    - cron: '0 */1 * * *'  # Every hour
   workflow_dispatch:
 
 env:
@@ -12,7 +11,6 @@ env:
 jobs:
   backup:
     runs-on: ubuntu-latest
-
     steps:
     - id: 'auth'
       name: 'Authenticate to Google Cloud'
@@ -25,9 +23,10 @@ jobs:
         
     - name: 'Create backup timestamp'
       id: timestamp
-      run: echo "timestamp=$(date +%Y%m%d_%H%M%S)" >> $GITHUB_OUTPUT
+      run: |
+        echo "timestamp=$(date +'%Y-%m-%d_%H-%M-%S')" >> $GITHUB_OUTPUT
         
     - name: 'Run Firestore Export'
       run: |
-        gcloud firestore export gs://${{ env.BACKUP_BUCKET }}/${{ steps.timestamp.outputs.timestamp }} \
+        gcloud firestore export gs://${{ env.BACKUP_BUCKET }}/backups/${{ steps.timestamp.outputs.timestamp }} \
           --project=${{ env.PROJECT_ID }}
